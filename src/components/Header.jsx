@@ -1,10 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { Plane, Clock, ShieldCheck, User, Menu, PanelLeftClose, PanelLeftOpen, Database, LogOut } from 'lucide-react';
+import { Plane, Clock, ShieldCheck, User, Menu, PanelLeftClose, PanelLeftOpen, Database, LogOut, Download, Smartphone } from 'lucide-react';
 import { getDbStatus } from '../services/bookingService';
 
 const Header = ({ activeTabTitle, isSidebarOpen, onToggleSidebar, currentUser, onLogout }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [dbStatus, setDbStatus] = useState({ database: 'Connecting...', isMongoConnected: false });
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [isAppInstalled, setIsAppInstalled] = useState(false);
+
+  useEffect(() => {
+    const handleBeforeInstall = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    const handleAppInstalled = () => {
+      setIsAppInstalled(true);
+      setDeferredPrompt(null);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsAppInstalled(true);
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const handleInstallPwa = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setIsAppInstalled(true);
+      }
+      setDeferredPrompt(null);
+    } else {
+      alert("GMR Hangar Booking PWA: Click your browser's menu (⋮ or ⨁) and select 'Install GMR Hangar' or 'Add to Home Screen'.");
+    }
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -65,6 +104,31 @@ const Header = ({ activeTabTitle, isSidebarOpen, onToggleSidebar, currentUser, o
       </div>
 
       <div className="header-right">
+        {/* PWA Install Button */}
+        <button
+          onClick={handleInstallPwa}
+          className="btn btn-sm"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+            padding: '0.4rem 0.8rem',
+            borderRadius: '20px',
+            backgroundColor: isAppInstalled ? 'rgba(16, 185, 129, 0.15)' : '#0284c7',
+            color: isAppInstalled ? '#10b981' : '#ffffff',
+            border: isAppInstalled ? '1px solid #10b981' : 'none',
+            fontSize: '0.78rem',
+            fontWeight: 700,
+            cursor: 'pointer',
+            boxShadow: isAppInstalled ? 'none' : '0 2px 8px rgba(2, 132, 199, 0.3)',
+            transition: 'all 0.2s ease'
+          }}
+          title={isAppInstalled ? 'GMR Hangar PWA Installed' : 'Install GMR Hangar as Desktop / Mobile App'}
+        >
+          <Smartphone size={15} />
+          <span>{isAppInstalled ? 'PWA Installed' : 'Install App (PWA)'}</span>
+        </button>
+
         {/* Live MongoDB Status Indicator */}
         <div 
           style={{
