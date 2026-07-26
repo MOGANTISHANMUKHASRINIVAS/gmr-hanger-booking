@@ -1,0 +1,1937 @@
+:root {
+  --bg-app: #f0f6ff;
+  --bg-sidebar: #081b33;
+  --bg-sidebar-hover: #0f2b52;
+  --bg-sidebar-active: #0284c7;
+  --bg-header: rgba(255, 255, 255, 0.88);
+  --bg-card: rgba(255, 255, 255, 0.88);
+  --bg-modal: rgba(255, 255, 255, 0.95);
+
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(2, 132, 199, 0.22);
+  --glass-border-glow: rgba(2, 132, 199, 0.4);
+  --glass-backdrop: blur(18px) saturate(180%);
+  --glass-shadow: 0 10px 30px rgba(2, 132, 199, 0.12);
+
+  --color-primary: #0284c7;
+  --color-primary-dark: #0369a1;
+  --color-primary-light: #e0f2fe;
+
+  --color-navy: #0f172a;
+  --color-slate-700: #1e293b;
+  --color-slate-600: #334155;
+  --color-slate-500: #64748b;
+  --color-slate-400: #94a3b8;
+  --color-slate-300: #cbd5e1;
+  --color-slate-200: #e2e8f0;
+  --color-slate-100: #f1f5f9;
+
+  --color-success: #059669;
+  --color-success-bg: #ecfdf5;
+  --color-success-border: #a7f3d0;
+
+  --color-danger: #dc2626;
+  --color-danger-bg: #fef2f2;
+  --color-danger-border: #fecaca;
+
+  --color-warning: #d97706;
+  --color-warning-bg: #fffbeb;
+
+  --color-airbus: #0284c7;
+  --color-airbus-bg: #e0f2fe;
+
+  --color-boeing: #4f46e5;
+  --color-boeing-bg: #e0e7ff;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --shadow-sm: 0 2px 4px rgba(2, 132, 199, 0.08);
+  --shadow-md: 0 8px 16px rgba(2, 132, 199, 0.12);
+  --shadow-lg: 0 12px 24px rgba(2, 132, 199, 0.18);
+  --shadow-xl: 0 20px 40px rgba(2, 132, 199, 0.22);
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Custom Airplane Cursor Theme */
+*,
+body,
+html {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%230284c7' stroke='%23ffffff' stroke-width='1.5'><path d='M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.7 5.2c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z'/></svg>") 0 0, url('/plane_cursor.svg'), auto !important;
+}
+
+button,
+a,
+input,
+select,
+textarea,
+.btn,
+.nav-item,
+.gantt-bar,
+.metric-card,
+[role="button"],
+.view-tab,
+.close-btn {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%2338bdf8' stroke='%230284c7' stroke-width='1.5'><path d='M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.7 5.2c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z'/></svg>") 4 4, url('/plane_pointer.svg'), pointer !important;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: linear-gradient(180deg, rgba(238, 246, 255, 0.82) 0%, rgba(219, 234, 254, 0.90) 100%), url('/gmr_hangar_bg.png') no-repeat center center fixed;
+  background-size: cover;
+  color: #0f172a;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Glass Layout */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  background: transparent;
+}
+
+/* Royal Navy Glass Sidebar */
+.sidebar {
+  width: 260px;
+  background: #081b33;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+  z-index: 40;
+  border-right: 1px solid rgba(2, 132, 199, 0.3);
+  box-shadow: 4px 0 24px rgba(8, 27, 51, 0.35);
+}
+
+.sidebar.collapsed {
+  margin-left: -260px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-header {
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-logo-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+}
+
+.sidebar-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-brand-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.sidebar-brand-subtitle {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.sidebar-nav {
+  padding: 1.25rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 1rem;
+  color: #e2e8f0 !important;
+  background: rgba(15, 23, 42, 0.65) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: var(--radius-md);
+  font-size: 0.925rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 100%;
+  text-align: left;
+}
+
+.nav-item:hover {
+  background: rgba(56, 189, 248, 0.18) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+  color: #ffffff !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.45);
+}
+
+.nav-item.active svg {
+  color: #ffffff !important;
+}
+
+.sidebar-footer {
+  padding: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.8rem;
+  color: var(--color-slate-400);
+}
+
+.shift-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  margin-top: 0.5rem;
+}
+
+.status-dot-pulse {
+  width: 8px;
+  height: 8px;
+  background-color: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+/* Main Content Layout */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+/* Header */
+.top-header {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border-bottom: 1px solid rgba(2, 132, 199, 0.2);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.08);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.station-badge {
+  background-color: #e0f2fe;
+  border: 1px solid #bae6fd;
+  color: #0284c7;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.time-widget {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #0369a1;
+  background-color: rgba(224, 242, 254, 0.7);
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  font-weight: 700;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #0284c7;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: 2px solid #38bdf8;
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.3);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.user-role {
+  font-size: 0.725rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Page Body */
+.page-content {
+  padding: 2rem;
+  flex: 1;
+}
+
+/* Metric Cards */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.1);
+  transition: var(--transition);
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  border-color: #0284c7;
+  box-shadow: 0 12px 30px rgba(2, 132, 199, 0.2);
+}
+
+/* Continuous Gantt Chart Bar Graph Styles */
+.gantt-container {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  box-shadow: 0 12px 36px rgba(2, 132, 199, 0.15);
+  overflow-x: auto;
+  position: relative;
+  width: 100%;
+}
+
+/* Custom Visible Scrollbar for Gantt Container */
+.gantt-container::-webkit-scrollbar {
+  height: 10px;
+}
+
+.gantt-container::-webkit-scrollbar-track {
+  background: #e0f2fe;
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+}
+
+.gantt-container::-webkit-scrollbar-thumb {
+  background: #0284c7;
+  border-radius: 5px;
+}
+
+.gantt-container::-webkit-scrollbar-thumb:hover {
+  background: #0369a1;
+}
+
+.gantt-header {
+  display: flex;
+  background: #081b33;
+  color: #38bdf8;
+  border-bottom: 2px solid #0284c7;
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Sticky Hangar Bay Label Column */
+.gantt-label-col {
+  width: 120px;
+  min-width: 120px;
+  padding: 0.85rem 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.85rem;
+  background: #081b33 !important;
+  border-right: 2px solid #0284c7;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  left: 0;
+  z-index: 30;
+  color: #ffffff !important;
+}
+
+.gantt-timeline-header {
+  flex: 1;
+  display: flex;
+}
+
+.gantt-header-cell {
+  flex: 1;
+  min-width: 36px;
+  padding: 0.65rem 0.15rem;
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+  color: #ffffff !important;
+  box-sizing: border-box !important;
+}
+
+.gantt-row {
+  display: flex;
+  border-bottom: 1px solid rgba(2, 132, 199, 0.15);
+  height: 60px;
+  position: relative;
+  width: max-content;
+  min-width: 100%;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.gantt-row:hover {
+  background-color: rgba(224, 242, 254, 0.7);
+}
+
+/* Sticky Hangar Bay Row Label Column */
+.gantt-row-label {
+  width: 120px;
+  min-width: 120px;
+  padding: 0 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: #ffffff !important;
+  background: #081b33 !important;
+  border-right: 2px solid #0284c7;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  left: 0;
+  z-index: 20;
+  box-shadow: 4px 0 12px rgba(8, 27, 51, 0.25);
+}
+
+.gantt-track {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  display: flex;
+}
+
+.gantt-bg-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  pointer-events: none;
+}
+
+.gantt-bg-cell {
+  flex: 1;
+  min-width: 36px;
+  border-right: 1px dashed rgba(2, 132, 199, 0.18);
+  height: 100%;
+  box-sizing: border-box !important;
+}
+
+/* Sleek Spanning Continuous Flight Bar */
+.gantt-bar {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  border-radius: var(--radius-md);
+  color: #ffffff;
+  padding: 0.4rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  z-index: 10;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+.gantt-bar:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 25px rgba(56, 189, 248, 0.5);
+  z-index: 25;
+}
+
+.gantt-text {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.gantt-reg {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+}
+
+.gantt-sub {
+  font-size: 0.72rem;
+  opacity: 0.95;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.metric-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-slate-500);
+  margin-bottom: 0.25rem;
+}
+
+.metric-value {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--color-navy);
+  line-height: 1.1;
+}
+
+.metric-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-icon-box.blue {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.metric-icon-box.green {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.metric-icon-box.red {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+.metric-icon-box.warning {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+/* Section Header */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Hangar Status Cards Grid */
+.hangar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.hangar-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-slate-200);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.hangar-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.hangar-card-header {
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-slate-100);
+  background-color: #fafafa;
+}
+
+.hangar-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-navy);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.status-badge.available {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  border: 1px solid var(--color-success-border);
+}
+
+.status-badge.occupied {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger-border);
+}
+
+.hangar-card-body {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.aircraft-reg-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reg-tag {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  background-color: var(--color-slate-100);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-slate-300);
+}
+
+.type-chip {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.type-chip.airbus {
+  background-color: var(--color-airbus-bg);
+  color: var(--color-airbus);
+}
+
+.type-chip.boeing {
+  background-color: var(--color-boeing-bg);
+  color: var(--color-boeing);
+}
+
+.card-detail-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.detail-label {
+  font-size: 0.725rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-slate-500);
+  letter-spacing: 0.03em;
+}
+
+.detail-value {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-slate-700);
+}
+
+.hangar-card-footer {
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--color-slate-100);
+  background-color: #fdfdfd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.empty-state-text {
+  color: var(--color-slate-400);
+  font-size: 0.875rem;
+  font-style: italic;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+/* Form Styling */
+.form-container {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-slate-200);
+  box-shadow: var(--shadow-md);
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group.full-width {
+  grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+  .form-group.full-width {
+    grid-column: span 1;
+  }
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-slate-700);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.form-input,
+.form-select,
+.form-textarea,
+select,
+input {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid #0284c7 !important;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.12);
+  transition: var(--transition);
+}
+
+select option,
+.form-select option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus,
+select:focus,
+input:focus {
+  outline: none;
+  border-color: #0369a1 !important;
+  box-shadow: 0 0 16px rgba(2, 132, 199, 0.35) !important;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Validation Alert Banner */
+.validation-banner {
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.validation-banner.success {
+  background-color: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
+  color: var(--color-success);
+}
+
+.validation-banner.error {
+  background-color: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
+  color: var(--color-danger);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Buttons */
+.btn-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.35rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.25);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+  box-shadow: 0 4px 8px rgba(2, 132, 199, 0.35);
+}
+
+.btn-secondary {
+  background-color: var(--color-slate-100);
+  border-color: var(--color-slate-300);
+  color: var(--color-slate-700);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-slate-200);
+  color: var(--color-navy);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-primary-light);
+}
+
+.btn-danger {
+  background-color: var(--color-danger);
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8rem;
+  border-radius: var(--radius-sm);
+}
+
+/* Tables */
+.table-container {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-slate-200);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.table-toolbar {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-slate-200);
+  background-color: #fafafa;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #ffffff;
+  border: 1px solid var(--color-slate-300);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.85rem;
+  width: 300px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  width: 100%;
+}
+
+.filters-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table th {
+  background-color: var(--color-slate-100);
+  padding: 0.85rem 1.25rem;
+  font-size: 0.775rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-slate-600);
+  border-bottom: 1px solid var(--color-slate-200);
+}
+
+.data-table td {
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  color: var(--color-slate-700);
+  border-bottom: 1px solid var(--color-slate-200);
+}
+
+.data-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  width: 100%;
+  max-width: 650px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid var(--color-slate-200);
+}
+
+.modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--color-slate-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fafafa;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--color-slate-200);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background-color: #fafafa;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--color-slate-400);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.close-btn:hover {
+  color: var(--color-navy);
+  background-color: var(--color-slate-200);
+}
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  background-color: var(--color-navy);
+  color: #ffffff;
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  animation: slideInRight 0.3s ease;
+  border-left: 4px solid var(--color-primary);
+}
+
+.toast.success {
+  border-left-color: var(--color-success);
+}
+
+.toast.error {
+  border-left-color: var(--color-danger);
+}
+
+.toast.warning {
+  border-left-color: var(--color-warning);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Calendar Timeline styling */
+.calendar-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.view-mode-tabs {
+  display: flex;
+  background: rgba(224, 242, 254, 0.8) !important;
+  padding: 0.35rem !important;
+  border-radius: var(--radius-md) !important;
+  gap: 0.35rem !important;
+  border: 1px solid rgba(2, 132, 199, 0.3) !important;
+}
+
+.view-tab {
+  padding: 0.45rem 0.95rem !important;
+  border: none !important;
+  background: transparent !important;
+  font-size: 0.825rem !important;
+  font-weight: 700 !important;
+  color: #0369a1 !important;
+  border-radius: var(--radius-sm) !important;
+  cursor: pointer !important;
+  transition: var(--transition) !important;
+}
+
+.view-tab:hover {
+  color: #0284c7 !important;
+  background: rgba(2, 132, 199, 0.12) !important;
+}
+
+.view-tab.active {
+  background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35) !important;
+}
+
+.timeline-matrix {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-slate-200);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+}
+
+.timeline-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  border-bottom: 1px solid var(--color-slate-200);
+  min-width: 800px;
+}
+
+.timeline-row:last-child {
+  border-bottom: none;
+}
+
+.timeline-label {
+  padding: 1rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--color-navy);
+  background-color: #fafafa;
+  border-right: 1px solid var(--color-slate-200);
+  display: flex;
+  align-items: center;
+}
+
+.timeline-track {
+  position: relative;
+  min-height: 60px;
+  padding: 0.5rem;
+  background-color: #ffffff;
+}
+
+.timeline-block {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.65rem;
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.timeline-block:hover {
+  transform: scaleY(1.05);
+  box-shadow: var(--shadow-md);
+  z-index: 10;
+}
+
+.timeline-block.airbus {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+}
+
+.timeline-block.boeing {
+  background: linear-gradient(135deg, #4f46e5, #3730a3);
+}
+
+/* Utilities */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.text-muted {
+  color: var(--color-slate-500);
+}
+
+.text-sm {
+  font-size: 0.85rem;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Continuous Gantt Chart Bar Graph Styles */
+.gantt-container {
+  background-color: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-slate-200);
+  box-shadow: var(--shadow-md);
+  overflow-x: auto;
+  position: relative;
+  width: 100%;
+}
+
+/* Custom Visible Scrollbar for Gantt Container */
+.gantt-container::-webkit-scrollbar {
+  height: 10px;
+}
+
+.gantt-container::-webkit-scrollbar-track {
+  background: var(--color-slate-100);
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+}
+
+.gantt-container::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 5px;
+}
+
+.gantt-container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-dark);
+}
+
+.gantt-header {
+  display: flex;
+  background-color: var(--bg-sidebar);
+  color: #ffffff;
+  border-bottom: 1px solid var(--color-slate-200);
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Sticky Hangar Bay Label Column */
+.gantt-label-col {
+  width: 120px;
+  min-width: 120px;
+  padding: 0.85rem 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  background-color: var(--bg-sidebar);
+  border-right: 2px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  position: sticky;
+  left: 0;
+  z-index: 30;
+}
+
+.gantt-timeline-header {
+  flex: 1;
+  display: flex;
+}
+
+.gantt-header-cell {
+  flex: 1;
+  min-width: 36px;
+  padding: 0.65rem 0.15rem;
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+
+.gantt-row {
+  display: flex;
+  border-bottom: 1px solid var(--color-slate-200);
+  height: 60px;
+  position: relative;
+  width: max-content;
+  min-width: 100%;
+}
+
+.gantt-row:hover {
+  background-color: #f8fafc;
+}
+
+/* Sticky Hangar Bay Row Label Column */
+.gantt-row-label {
+  width: 120px;
+  min-width: 120px;
+  padding: 0 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-navy);
+  background-color: #f8fafc;
+  border-right: 2px solid var(--color-slate-300);
+  display: flex;
+  align-items: center;
+  position: sticky;
+  left: 0;
+  z-index: 20;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.04);
+}
+
+.gantt-track {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  display: flex;
+}
+
+.gantt-bg-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  pointer-events: none;
+}
+
+.gantt-bg-cell {
+  flex: 1;
+  min-width: 36px;
+  border-right: 1px dashed var(--color-slate-200);
+  height: 100%;
+}
+
+/* Sleek Spanning Continuous Flight Bar (No inner images) */
+.gantt-bar {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  border-radius: var(--radius-md);
+  color: #ffffff;
+  padding: 0.4rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  z-index: 10;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.gantt-bar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(2, 132, 199, 0.5);
+  z-index: 20;
+}
+
+.gantt-text {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.gantt-reg {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+}
+
+.gantt-sub {
+  font-size: 0.72rem;
+  opacity: 0.95;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Flight Takeoff & Flying Page Transition Theme */
+.flight-transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(240, 246, 255, 0.88);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: all;
+  animation: fadeInOverlay 0.15s ease-out;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.flying-plane-container {
+  position: absolute;
+  top: 42%;
+  left: -120px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  animation: flyAcrossScreen 0.75s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes flyAcrossScreen {
+  0% {
+    left: -120px;
+    transform: translateY(40px) scale(0.7);
+  }
+
+  50% {
+    transform: translateY(-20px) scale(1.1);
+  }
+
+  100% {
+    left: calc(100% + 120px);
+    transform: translateY(-60px) scale(0.9);
+  }
+}
+
+.jet-plane-icon {
+  background: #ffffff;
+  padding: 0.75rem;
+  border-radius: 50%;
+  box-shadow: 0 10px 30px rgba(2, 132, 199, 0.4);
+  border: 2px solid #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jet-vapor-trail {
+  height: 6px;
+  width: 320px;
+  background: linear-gradient(90deg, transparent 0%, rgba(56, 189, 248, 0.2) 40%, rgba(2, 132, 199, 0.85) 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.6);
+  margin-right: -10px;
+}
+
+.flight-status-banner {
+  position: absolute;
+  bottom: 25%;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid #0284c7;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 36px rgba(2, 132, 199, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  animation: slideUpBanner 0.3s ease-out;
+}
+
+@keyframes slideUpBanner {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.spin-radar {
+  animation: spinRadar 1.5s linear infinite;
+  color: #0284c7;
+}
+
+@keyframes spinRadar {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Real Architectural Hangar Structure Design */
+.hangar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.hangar-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 2px solid rgba(2, 132, 199, 0.35);
+  border-radius: 22px 22px 14px 14px;
+  box-shadow: 0 14px 36px rgba(2, 132, 199, 0.15), 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.hangar-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 45px rgba(2, 132, 199, 0.25);
+  border-color: #0284c7;
+}
+
+/* Hangar Steel Gabled Arch Roof Structure Header */
+.hangar-card-header {
+  background: linear-gradient(135deg, #081b33 0%, #0d274c 60%, #0369a1 100%);
+  color: #ffffff;
+  padding: 1.1rem 1.25rem 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid #0284c7;
+  position: relative;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+/* Roof Truss Diagonal Beam Hatching */
+.hangar-card-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, #38bdf8, #38bdf8 12px, #081b33 12px, #081b33 24px);
+}
+
+.hangar-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+/* Hangar Bay Door Entry Frame Body */
+.hangar-card-body {
+  padding: 1.1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  background: linear-gradient(180deg, rgba(238, 246, 255, 0.65) 0%, rgba(255, 255, 255, 0.95) 100%);
+  border-left: 4px solid rgba(2, 132, 199, 0.2);
+  border-right: 4px solid rgba(2, 132, 199, 0.2);
+  position: relative;
+}
+
+/* Hangar Bay Door Structural Pillars */
+.hangar-card-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background: repeating-linear-gradient(180deg, #0284c7 0px, #0284c7 8px, transparent 8px, transparent 16px);
+  opacity: 0.5;
+}
+
+.hangar-card-body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 4px;
+  background: repeating-linear-gradient(180deg, #0284c7 0px, #0284c7 8px, transparent 8px, transparent 16px);
+  opacity: 0.5;
+}
+
+/* Docked Aircraft Bay Chamber Frame */
+.hangar-aircraft-dock {
+  height: 105px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 0.35rem;
+  border: 2px solid #0284c7;
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.2);
+}
+
+/* Yellow Hazard Header Strip above Docked Aircraft */
+.hangar-aircraft-dock::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: repeating-linear-gradient(45deg, #d97706, #d97706 10px, #0f172a 10px, #0f172a 20px);
+  z-index: 5;
+}
+
+/* Empty Open Runway Bay Graphic */
+.hangar-open-bay {
+  border: 2px dashed rgba(2, 132, 199, 0.4);
+  background: rgba(224, 242, 254, 0.45);
+  border-radius: var(--radius-md);
+  padding: 1.75rem 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hangar-card-footer {
+  padding: 0.9rem 1.1rem;
+  background: rgba(240, 246, 255, 0.9);
+  border-top: 1.5px solid rgba(2, 132, 199, 0.2);
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+}
+
+/* Full-screen Airport Runway Welcome Portal Page */
+.fullscreen-welcome-portal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 500;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.5rem 3.5rem;
+  box-sizing: border-box;
+}
+
+.welcome-bg-image-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('/gmr_rgia_mro_bg.png') no-repeat center center / cover !important;
+  z-index: 1;
+  transform: scale(1);
+  filter: brightness(1.05) contrast(1.06) saturate(1.05) !important;
+  image-rendering: -webkit-optimize-contrast !important;
+}
+
+.welcome-bg-overlay {
+  display: none !important;
+}
+
+.welcome-top-brand {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.brand-logo-box {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: rgba(8, 27, 51, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(56, 189, 248, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  background: rgba(8, 27, 51, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.brand-main {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+}
+
+.brand-sub {
+  font-size: 0.725rem;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: 0.08em;
+}
+
+/* Small Hangar Booking Glass Badge at Bottom Left Corner */
+.welcome-bottom-left-badge {
+  position: absolute;
+  bottom: 3.5rem;
+  left: 3.5rem;
+  z-index: 20;
+}
+
+.small-glass-badge {
+  background: rgba(8, 27, 51, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(56, 189, 248, 0.45);
+  color: #ffffff;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-size: 0.925rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(56, 189, 248, 0.25);
+}
+
+.small-glass-badge span {
+  color: #38bdf8;
+}
+
+/* Bottom Right Corner "GET STARTED" Action */
+.welcome-bottom-right-action {
+  position: absolute;
+  bottom: 3.5rem;
+  right: 3.5rem;
+  z-index: 20;
+}
+
+.get-started-btn-8k {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.95) 0%, rgba(3, 105, 161, 0.98) 60%, rgba(8, 27, 51, 0.99) 100%) !important;
+  color: #ffffff !important;
+  border: 2px solid #38bdf8 !important;
+  padding: 1.25rem 3rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 14px 45px rgba(2, 132, 199, 0.8), 0 0 40px rgba(56, 189, 248, 0.7);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.get-started-btn-8k:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 22px 60px rgba(2, 132, 199, 0.95), 0 0 50px rgba(56, 189, 248, 0.95);
+  border-color: #ffffff !important;
+}
+
+.arrow-pulse {
+  animation: moveArrow 1s infinite alternate ease-in-out;
+}
+
+@keyframes moveArrow {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(6px); }
+}
