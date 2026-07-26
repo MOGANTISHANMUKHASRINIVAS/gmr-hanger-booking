@@ -732,10 +732,14 @@ app.post('/api/bookings/import', async (req, res) => {
 });
 
 // Start Express server
-app.listen(PORT, () => {
-  console.log(`===================================================`);
-  console.log(`🚀 GMR Aero Technic MongoDB Express Server Running!`);
-  console.log(`📡 Port: ${PORT}`);
-  console.log(`🔗 API Base: http://localhost:${PORT}/api`);
-  console.log(`===================================================`);
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`===================================================`);
+    console.log(`🚀 GMR Aero Technic MongoDB Express Server Running!`);
+    console.log(`📡 Port: ${PORT}`);
+    console.log(`🔗 API Base: http://localhost:${PORT}/api`);
+    console.log(`===================================================`);
+  });
+}
+
+export default app;
