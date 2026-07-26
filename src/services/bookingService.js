@@ -227,12 +227,15 @@ export const HANGAR_LIST = Array.from({ length: TOTAL_HANGARS }, (_, i) => `Hang
 export const getDbStatus = async () => {
   try {
     const res = await fetch(`${API_BASE}/status`);
-    if (!res.ok) throw new Error('Status check failed');
-    return await res.json();
+    const contentType = res.headers.get('content-type');
+    if (res.ok && contentType && contentType.includes('application/json')) {
+      return await res.json();
+    }
+    throw new Error('Static Host / Offline');
   } catch (err) {
     return {
       status: 'offline',
-      database: 'Local Cache / Offline',
+      database: 'Local Persistence / Active',
       isMongoConnected: false,
       error: err.message
     };
@@ -243,14 +246,17 @@ export const getDbStatus = async () => {
 export const fetchBookings = async () => {
   try {
     const res = await fetch(`${API_BASE}/bookings`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    cachedBookings = data;
-    isCacheLoaded = true;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    return data;
+    const contentType = res.headers.get('content-type');
+    if (res.ok && contentType && contentType.includes('application/json')) {
+      const data = await res.json();
+      cachedBookings = data;
+      isCacheLoaded = true;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      return data;
+    }
+    throw new Error('Static Host / Offline');
   } catch (err) {
-    console.warn('⚠️ Fetching from REST API failed, using local storage fallback:', err.message);
+    console.warn('⚠️ Fetching from REST API fallback to local storage:', err.message);
     const local = localStorage.getItem(STORAGE_KEY);
     if (local) {
       try {
@@ -287,11 +293,14 @@ export const getBookings = () => {
 export const resetToInitialData = async () => {
   try {
     const res = await fetch(`${API_BASE}/bookings/reset`, { method: 'POST' });
-    if (!res.ok) throw new Error('Reset failed');
-    const data = await res.json();
-    cachedBookings = data.bookings || INITIAL_BOOKINGS;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cachedBookings));
-    return cachedBookings;
+    const contentType = res.headers.get('content-type');
+    if (res.ok && contentType && contentType.includes('application/json')) {
+      const data = await res.json();
+      cachedBookings = data.bookings || INITIAL_BOOKINGS;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cachedBookings));
+      return cachedBookings;
+    }
+    throw new Error('Static Host Reset');
   } catch (err) {
     console.warn('Fallback resetting local cache:', err.message);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_BOOKINGS));
