@@ -200,40 +200,19 @@ const SEED_BOOKINGS = [
 let memoryUsers = [];
 let memoryBookings = [...SEED_BOOKINGS];
 
-// Nodemailer Transporter Setup
+// Nodemailer Transporter Setup for Gmail SMTP
 const createNodemailerTransporter = () => {
-  const emailUser = process.env.EMAIL_USER;
-  let emailPass = process.env.EMAIL_PASS;
+  const emailUser = process.env.EMAIL_USER || 'shanmukhasrinivasmoganti@gmail.com';
+  const emailPass = (process.env.EMAIL_PASS || 'gxlm ugjz ctyc pneq').trim().replace(/\s+/g, '');
 
-  if (emailUser && emailPass) {
-    emailPass = emailPass.trim().replace(/\s+/g, '');
-    console.log(`📧 Configuring Nodemailer with Gmail SMTP user: ${emailUser}`);
-    return nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true, // SSL/TLS port 465
-      auth: {
-        user: emailUser,
-        pass: emailPass
-      },
-      tls: {
-        rejectUnauthorized: false
-      }
-    });
-  }
-
-  // Fallback simulator transporter
-  return {
-    sendMail: async (mailOptions) => {
-      console.log('===================================================');
-      console.log('✉️  [NODEMAILER OTP EMAIL DISPATCH]');
-      console.log(` TO:      ${mailOptions.to}`);
-      console.log(` SUBJECT: ${mailOptions.subject}`);
-      console.log(` BODY:\n${mailOptions.text || mailOptions.html}`);
-      console.log('===================================================');
-      return { messageId: `sim-msg-${Date.now()}` };
+  console.log(`📧 Configuring Nodemailer with Gmail SMTP user: ${emailUser}`);
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: emailUser,
+      pass: emailPass
     }
-  };
+  });
 };
 
 const transporter = createNodemailerTransporter();
@@ -345,17 +324,18 @@ const sendOtpEmail = async (userEmail, userName, otpCode) => {
     </div>
   `;
 
-  const senderEmail = process.env.EMAIL_USER || 'no-reply@gmraerotechnic.com';
+  const senderEmail = process.env.EMAIL_USER || 'shanmukhasrinivasmoganti@gmail.com';
   try {
-    await transporter.sendMail({
+    const info = await transporter.sendMail({
       from: `"GMR Aero Technic MRO Security" <${senderEmail}>`,
       to: userEmail,
       subject: `🔐 GMR Aero Technic 2-Step OTP Verification Code: ${otpCode}`,
       text: `Your GMR Aero Technic MRO Verification OTP is: ${otpCode}`,
       html: htmlContent
     });
+    console.log(`✅ Nodemailer successfully sent OTP email to ${userEmail} (Message ID: ${info.messageId})`);
   } catch (err) {
-    console.warn(`⚠️ SMTP Mail Delivery Notice (${err.message}) — OTP logged below for verification:`);
+    console.error(`❌ SMTP Mail Delivery Error (${err.message}):`, err);
   }
 };
 
