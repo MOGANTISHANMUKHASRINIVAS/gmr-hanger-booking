@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/gmr_hangar_db';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://shanmukhasrinivasmoganti_db_user:22uJJPVyWndtXGSd@cluster0.tacmmth.mongodb.net/gmr_hangar_db?retryWrites=true&w=majority';
 const JWT_SECRET = process.env.JWT_SECRET || 'gmr_aero_technic_jwt_secret_2026';
 
 app.use(cors());
