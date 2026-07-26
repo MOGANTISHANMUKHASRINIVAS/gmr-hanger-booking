@@ -261,28 +261,37 @@ const seedDatabaseIfEmpty = async () => {
   });
 })();
 
-// Connect to MongoDB Atlas / Local
-mongoose.connect(MONGODB_URI, {
-  serverSelectionTimeoutMS: 5000
-})
-  .then(async () => {
+// Serverless MongoDB Connection Manager
+let cachedDb = null;
+const connectToDatabase = async () => {
+  if (cachedDb && mongoose.connection.readyState === 1) {
+    isMongoConnected = true;
+    return cachedDb;
+  }
+
+  try {
+    const db = await mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 8000
+    });
     isMongoConnected = true;
     mongoErrorDetails = null;
-    console.log('===================================================');
-    console.log('🟢 MongoDB Connected Successfully!');
-    console.log(`📡 URI: ${MONGODB_URI}`);
-    console.log('===================================================');
+    cachedDb = db;
+    console.log('🟢 MongoDB Atlas Connected Successfully!');
     await seedDatabaseIfEmpty();
-  })
-  .catch(err => {
+    return db;
+  } catch (err) {
     isMongoConnected = false;
     mongoErrorDetails = err.message;
-    console.warn('===================================================');
-    console.warn('⚠️  MongoDB Connection Warning:');
-    console.warn(`    ${err.message}`);
-    console.warn('    Server will run with in-memory auth fallback.');
-    console.warn('===================================================');
-  });
+    console.warn('⚠️ MongoDB Atlas Connection Warning:', err.message);
+    return null;
+  }
+};
+
+// Express Middleware: Ensure MongoDB is connected before route handlers
+app.use(async (req, res, next) => {
+  await connectToDatabase();
+  next();
+});
 
 // Overlap validation helper
 const isOverlapping = (startA, endA, startB, endB) => {
